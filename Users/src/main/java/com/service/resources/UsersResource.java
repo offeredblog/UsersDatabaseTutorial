@@ -32,13 +32,13 @@ public class UsersResource {
     }
 
     @POST
-    public UserStored createUser(UserInsert userInsert) {
+    public int createUser(UserInsert userInsert) {
         return usersController.createUser(userInsert);
     }
 
     @PUT
-    public UserStored updateUser(UserUpdate userUpdate) {
-        return usersController.updateUser(userUpdate);
+    public void updateUser(UserUpdate userUpdate) {
+        usersController.updateUser(userUpdate);
     }
 
     @DELETE

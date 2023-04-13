@@ -2,20 +2,25 @@ package com.service;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
+import io.dropwizard.db.DataSourceFactory;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 public class UsersServiceConfiguration extends Configuration {
+    private static final String DATABASE = "database";
 
-    @NotEmpty
-    private String database;
-    @JsonProperty
-    public String getDatabase() {
-        return database;
+    @Valid
+    @NotNull
+    private DataSourceFactory dataSourceFactory = new DataSourceFactory();
+
+    @JsonProperty(DATABASE)
+    public DataSourceFactory getDataSourceFactory() {
+        return dataSourceFactory;
     }
 
-    @JsonProperty
-    public void setDatabase(String database) {
-        this.database = database;
+    @JsonProperty(DATABASE)
+    public void setDataSourceFactory(final DataSourceFactory dataSourceFactory) {
+        this.dataSourceFactory = dataSourceFactory;
     }
 }

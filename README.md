@@ -1,7 +1,5 @@
-# UsersApiTutorial
-An example backend REST service for creating, reading, updating, and deleting Users.
-
-**As this project was meant to demonstrate the basics of REST APIs, it is not using an actual database and is instead storing the users in memory.**
+# UsersDatabaseTutorial
+An example backend REST service for creating, reading, updating, and deleting Users and persisting those changes into the a MySQL database.
 
 In order to run this project, pull it down locally and run the following:
 - mvn package

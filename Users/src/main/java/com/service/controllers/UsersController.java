@@ -1,5 +1,6 @@
 package com.service.controllers;
 
+import com.data.UsersDAO;
 import com.google.common.collect.Iterables;
 import com.service.model.UserInsert;
 import com.service.model.UserStored;
@@ -13,69 +14,29 @@ import java.util.stream.Collectors;
 public class UsersController {
 
     private final List<UserStored> usersList = new ArrayList<>();
+    private final UsersDAO usersDAO;
 
-    public UsersController() {}
+    public UsersController(UsersDAO usersDAO) {
+        this.usersDAO = usersDAO;
+    }
 
     public List<UserStored> getAllUsers() {
-        return usersList;
+        return usersDAO.getAllUsers();
     }
 
     public Optional<UserStored> getUserById(int userId) {
-        return usersList
-                .stream()
-                .filter(userStored -> userStored.getUserId() == userId)
-                .findFirst();
+        return usersDAO.getById(userId);
     }
 
-    public UserStored createUser(UserInsert userInsert) {
-        UserStored userStored = toUserStored(userInsert, usersList.size());
-        usersList.add(userStored);
-        return userStored;
+    public int createUser(UserInsert userInsert) {
+        return usersDAO.createPart(userInsert);
     }
 
-    public UserStored updateUser(UserUpdate userUpdate) {
-        UserStored userStored = toUserStored(userUpdate);
-
-        int toUpdateIndex = usersList.indexOf(
-                Iterables.getOnlyElement(
-                        usersList
-                                .stream()
-                                .filter(user -> user.getUserId() == userUpdate.getUserId())
-                                .collect(Collectors.toList())
-                )
-        );
-
-        usersList.set(toUpdateIndex, userStored);
-        return userStored;
+    public void updateUser(UserUpdate userUpdate) {
+        usersDAO.updateUser(userUpdate);
     }
 
     public void deleteUser(int userId) {
-        int toDeleteIndex = usersList.indexOf(
-                Iterables.getOnlyElement(
-                        usersList
-                                .stream()
-                                .filter(user -> user.getUserId() == userId)
-                                .collect(Collectors.toList())
-                )
-        );
-        usersList.remove(toDeleteIndex);
-    }
-
-    private UserStored toUserStored(UserInsert userInsert, int id) {
-        return new UserStored(
-                id,
-                userInsert.getUserName(),
-                userInsert.getFirstName(),
-                userInsert.getLastName()
-        );
-    }
-
-    private UserStored toUserStored(UserUpdate userUpdate) {
-        return new UserStored(
-                userUpdate.getUserId(),
-                userUpdate.getUserName(),
-                userUpdate.getFirstName(),
-                userUpdate.getLastName()
-        );
+        usersDAO.deleteUser(userId);
     }
 }
